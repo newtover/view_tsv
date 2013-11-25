@@ -31,6 +31,9 @@ td:nth-child(2) {{max-width:60em;overflow-y:auto;}}
 var file_data = {json};
 console.log(file_data);
 
+// it should not be empty by the moment
+var textContent = (document.documentElement.textContent)?'textContent': 'innerText';
+
 function fillTable(){{
   var table = document.getElementById('data-table');
   var num_cols = file_data.max_col_count;
@@ -38,17 +41,17 @@ function fillTable(){{
   var h_row = table.insertRow(-1);
   for (var j = 0; j < num_cols + 1; j++) {{
       var cell = h_row.insertCell(-1);
-      cell.innerText = String.fromCharCode(64+j);
+      cell[textContent] = String.fromCharCode(64+j);
   }}
 
   for (var i = 0; i < num_rows; i++) {{
       var h_row = table.insertRow(-1);
       var cell = h_row.insertCell(-1);
-      cell.innerText = (i+1);
+      cell[textContent] = (i+1);
       var data_row = file_data.rows[i];
       for (var j = 0; j < num_cols; j ++) {{
           cell = h_row.insertCell(-1);
-          cell.innerText = data_row[j];
+          cell[textContent] = data_row[j];
       }}
   }}
 }}
