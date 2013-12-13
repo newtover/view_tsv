@@ -9,7 +9,9 @@ The module can be run in the same way as SimpleHTTPServer with the additional PO
 
 from cStringIO import StringIO
 import json
+import BaseHTTPServer as _b_server
 import SimpleHTTPServer as _server
+import SocketServer as _s_server
 
 __version_info__ = (0, 1, 1)
 __version__ = '.'.join(map(str, __version_info__))
@@ -121,5 +123,15 @@ class TSVHandler(_server.SimpleHTTPRequestHandler):
 
 
 
+class LocalHTTPServer(_b_server.HTTPServer):
+    """Inheritor of the BaseHTTPServer.HTTPServer that runs strictly on 127.0.0.1"""
+    def __init__(self, server_address, RequestHandlerClass,
+                 bind_and_activate=True):
+        # serve only on 127.0.0.1, port is taken from the input
+        server_address = ('127.0.0.1', server_address[1])
+
+        _s_server.TCPServer.__init__(self, server_address, RequestHandlerClass,
+                           bind_and_activate)
+
 if __name__ == '__main__':
-    _server.test(HandlerClass=TSVHandler)
+    _server.test(HandlerClass=TSVHandler, ServerClass=LocalHTTPServer)
